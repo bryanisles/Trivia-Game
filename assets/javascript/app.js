@@ -1,3 +1,5 @@
+
+// listing all global variables
 var myQuestions = [{
 	// question 1
 	myQuestion:"Mathematically @ standard conditions, what is the relative mass of Earth to itself @ standard conditions?",
@@ -21,37 +23,67 @@ var myQuestions = [{
 }];
 
 var timer = 0;
+var myIter = 0;
+var myMaxIter = 128;
 
 var myCont = {
 	myCorrectCounter: 0,
 	myIncorrectCounter: 0,
-	myCounter: 10,
+	myCounter: 100,
+	/*
+	mySelectedQuestions:[],
+	myCheckAnsweredQuestions: function(){
+		do{
+			myIter++;
+			var myRand = Math.floor(Math.random()*myQuestions.length);
+			if (myIter > myMaxIter) {
+				alert("was not able to locate a proper number under the max iterations");
+				break;
+			}
+		} while (myCont.mySelectedQuestions.indexOf(myRand) > -1);
+		myCont.mySelectedQuestions.push(myRand);
+		return myRand;
+	},
+	myNextQuestion: function(){
+		
+	},
+	*/
+	// countdown function
 	myCountdown: function() {
 		myCont.myCounter--;
 		$("#myCounter").html(myCont.myCounter);
 		if(myCont.myCounter <= 0){
 			console.log("Time is up");
-			myCont.done();
+			myCont.myCompletion();
 		}
 	},
+	//initialize function
 	myStart: function() {
 		timer = setInterval(myCont.myCountdown, 1000);
-		$("#subwrapper").prepend("<h2>Time Remaining: <span id='myCounter'>"+myCont.myCounter+"</span> Seconds</h2>")
+		$("#subwrapper").prepend("<h2>Time Remaining: <span id='myCounter'>" 
+			                      + myCont.myCounter
+			                      + "</span> Seconds</h2>")
 		$("#start").remove();
 		for(var i = 0; i < myQuestions.length; i++) {
-			$("#subwrapper").append("<h2>" + myQuestions[i].myQuestion + "</h2>")
+			$("#subwrapper").append("<h2>" 
+				                     + myQuestions[i].myQuestion 
+				                     + "</h2>")
 			for(var j = 0; j < myQuestions[i].myAnswers.length; j++) {
-				$("#subwrapper").append("<input type='radio' name='myQuestion-" + i + "' value='"+ myQuestions[i].myAnswers[j]+"'>" +myQuestions[i].myAnswers[j]);
+				$("#subwrapper").append("<input type='radio' name='myQuestion-" 
+					                    + i 
+					                    + "' value='"
+					                    + myQuestions[i].myAnswers[j]
+					                    +"'>" 
+					                    + myQuestions[i].myAnswers[j]);
 			}
 		}
 	},
-	done: function() {
+	// completion function
+	myCompletion: function() {
 		for(var i = 0; i < myQuestions.length; i++) {
-			$.each($("input[name='myQuestion-"+i+"']:checked"),function() {
-				console.log(this);
-				console.log($(this).val());
-				console.log(myQuestions[i].myCorrectAnswer);
-				console.log($(this).val() == myQuestions[i].myCorrectAnswer);
+			$.each($("input[name='myQuestion-"
+				      + i 
+				      +"']:checked"),function() {
 				if($(this).val() == myQuestions[i].myCorrectAnswer) {
 					myCont.myCorrectCounter++;
 				} else {
@@ -61,13 +93,22 @@ var myCont = {
 		}
 		this.myResult();
 	},
+	// Result output function
 	myResult: function() {
 		clearInterval(timer);
 		$("#subwrapper h2").remove();
 		$("#subwrapper").html("Game Over");
-		$("#subwrapper").append("<h3>Correct Answers: " +this.myCorrectCounter+"</h3>");
-		$("#subwrapper").append("<h3>Incorrect Answers: " +this.myIncorrectCounter+"</h3>");
-		$("#subwrapper").append("<h3>Unanswered: " + (myQuestions.length - (this.myIncorrectCounter + this.myCorrectCounter))+"</h3>");
+		$("#subwrapper").append("<h3>Correct Answers: " 
+			                     + this.myCorrectCounter 
+			                     +"</h3>");
+		$("#subwrapper").append("<h3>Incorrect Answers: " 
+			                     + this.myIncorrectCounter 
+			                     +"</h3>");
+		$("#subwrapper").append("<h3>Unanswered: " 
+			                     + (myQuestions.length 
+			                     	- (this.myIncorrectCounter 
+			                     		+ this.myCorrectCounter))
+			                     +"</h3>");
 	}
 }
 
