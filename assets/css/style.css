@@ -1,0 +1,19 @@
+.jumbotron {
+	background-image:url("../images/cover.jpg");
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: top;
+	height:400px;
+}
+
+.jumbotron h1, .jumbotron h4 {
+	position:relative;
+	display:block;
+	background-color:rgba(100,100,100,0.75);
+	margin:0 auto;
+	top:150px;
+	left:0;
+	right:0;
+	text-align: center;
+	color:#ccc;
+}

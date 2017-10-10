@@ -22,32 +22,49 @@ var myQuestions = [{
 	myCorrectAnswer: "It is due to the atmospheric index of refraction" //myQuestions[3].myAnswers[1]
 }];
 
-var timer = 0;
+var myFirstTime = 120;
 var myIter = 0;
+var myZero = 0;
 var myMaxIter = 128;
+var myRand;
+var myStyleCnt = 0;
+
+var onClickStart = function() {
+	myCont.myStart();
+};
+
+var userConfirmation = function() {
+	var tempConfirm = confirm("play again");
+	if(tempConfirm){
+			myCont.myClearFunc();	
+	}
+};
 
 var myCont = {
-	myCorrectCounter: 0,
-	myIncorrectCounter: 0,
-	myCounter: 100,
-	/*
-	mySelectedQuestions:[],
+	myCorrectCounter: myZero,
+	myIncorrectCounter: myZero,
+	myCounter: myFirstTime,
+// ===================================================================================================
+/*	mySelectedQuestions:[],
 	myCheckAnsweredQuestions: function(){
 		do{
 			myIter++;
-			var myRand = Math.floor(Math.random()*myQuestions.length);
+			myRand = Math.floor(Math.random()*myQuestions.length);
 			if (myIter > myMaxIter) {
 				alert("was not able to locate a proper number under the max iterations");
 				break;
 			}
 		} while (myCont.mySelectedQuestions.indexOf(myRand) > -1);
 		myCont.mySelectedQuestions.push(myRand);
+		console.log(myQuestions[myRand].myQuestion);
 		return myRand;
 	},
 	myNextQuestion: function(){
-		
-	},
-	*/
+		var tempRand = myCont.myCheckAnsweredQuestions();
+
+		myQuestions[tempRand];
+	},*/
+// ===================================================================================================
 	// countdown function
 	myCountdown: function() {
 		myCont.myCounter--;
@@ -59,10 +76,10 @@ var myCont = {
 	},
 	//initialize function
 	myStart: function() {
-		timer = setInterval(myCont.myCountdown, 1000);
-		$("#subwrapper").prepend("<h2>Time Remaining: <span id='myCounter'>" 
+		var timer = setInterval(myCont.myCountdown, 1000);
+		$("#subwrapper").prepend("<h3>Time: <span id='myCounter'>" 
 			                      + myCont.myCounter
-			                      + "</span> Seconds</h2>")
+			                      + "</span> Seconds</h3>")
 		$("#start").remove();
 		for(var i = 0; i < myQuestions.length; i++) {
 			$("#subwrapper").append("<h2>" 
@@ -84,12 +101,12 @@ var myCont = {
 			$.each($("input[name='myQuestion-"
 				      + i 
 				      +"']:checked"),function() {
-				if($(this).val() == myQuestions[i].myCorrectAnswer) {
+				if(this.value == myQuestions[i].myCorrectAnswer) {
 					myCont.myCorrectCounter++;
 				} else {
 					myCont.myIncorrectCounter++;
 				}
-			})	
+			});	
 		}
 		this.myResult();
 	},
@@ -98,26 +115,50 @@ var myCont = {
 		clearInterval(timer);
 		$("#subwrapper h2").remove();
 		$("#subwrapper").html("Game Over");
-		$("#subwrapper").append("<h3>Correct Answers: " 
+		$("#subwrapper").append("<h3>Total Correct: " 
 			                     + this.myCorrectCounter 
 			                     +"</h3>");
-		$("#subwrapper").append("<h3>Incorrect Answers: " 
+		$("#subwrapper").append("<h3>Total Incorrect: " 
 			                     + this.myIncorrectCounter 
 			                     +"</h3>");
-		$("#subwrapper").append("<h3>Unanswered: " 
+		$("#subwrapper").append("<h3>Total Unanswered: " 
 			                     + (myQuestions.length 
 			                     	- (this.myIncorrectCounter 
 			                     		+ this.myCorrectCounter))
 			                     +"</h3>");
-	}
-}
+		var tempConfirm = setTimeout(userConfirmation, 3000);
+		
+	},
+	myClearFunc: function() {
+		myCont.myCounter = myFirstTime;
+		myCont.myCorrectCounter = myZero;
+		myCont.myIncorrectCounter = myZero;
+		myCont.mySelectedQuestions = [];
+		$("#subwrapper").html("<div id='start' onclick='onClickStart()'>Start</button>")
+		switch (myStyleCnt) {
+			case 0:
+				var tempBtnStyle = "warning";
+				break;
+			case 1:
+				var tempBtnStyle = "danger";
+				break;
+			case 2:
+				var tempBtnStyle = "success";
+				break;
+			case 3:
+				var tempBtnStyle = "info";
+				break;
+			default:
+				var tempBtnStyle = "default";
+				myStyleCnt = -1;
+
+		}
+		myStyleCnt++;
+		$("#start").attr("class","btn btn-" + tempBtnStyle);
+		
+	} 
+};
 
 $(document).ready(function(){
-
-	$("#start").on("click", function(){
-		console.log("Clicked");
-		myCont.myStart();
-	});
-
-});
-
+	console.log(myQuestions.length);
+})
